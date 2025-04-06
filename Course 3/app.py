@@ -57,6 +57,8 @@ else:
 
     api.single_fly_takeoff()
 
+    api.Plane_cmd_camera_angle(1, 45)
+
     while True:
         frame = video.get_video()
         x,y, frame = detect_ball(frame, "red")
@@ -65,6 +67,10 @@ else:
             cv2.imshow("Ball Detection", frame)
             cv2.imwrite(f"Outputs/OBS-3/Red-Detection-{timestamp}.png/", frame)
             cv2.waitKey(1)
+            api.single_fly_curvilinearFlight(10, 40, -30)
+            api.single_fly_turnleft(90)
+            time.sleep(1)
+
             break
     
     while True:
@@ -75,7 +81,9 @@ else:
             cv2.imshow("Ball Detection", frame)
             cv2.imwrite(f"Outputs/OBS-3/Blue-Detection-{timestamp}.png/", frame)
             cv2.waitKey(1)
-            break    
+            api.single_fly_curvilinearFlight(-30, -20, 0)
+            api.single_fly_forward(30)
+            break
         
 
     cv2.destroyAllWindows()

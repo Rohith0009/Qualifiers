@@ -69,7 +69,7 @@ else:
     api.single_fly_takeoff()
     api.single_fly_forward(10)
 
-    move = threading.Thread(target=circle_up, args=[50,20,100, 1])
+    move = threading.Thread(target=circle_up, args=[50,30,100, 1])
     detect = threading.Thread(target=detection, args=[])
     move.start()
     detect.start()
