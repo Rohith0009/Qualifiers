@@ -49,3 +49,37 @@ else:
     battery = api.get_battery()
     print("battery level: " + str(api.get_battery()))
 
+    video = hula_video(api, display=False)
+    video.video_mode_on()
+    video.startrecording()
+
+    api.single_fly_takeoff()
+
+    while True:
+        frame = video.get_video()
+        x,y, frame = detect_ball(frame, "red")
+        if x != None:
+            print(f"Red Ball Detected at {x},{y}")
+            cv2.imshow("Ball Detection", frame)
+            api.Plane_fly_take_photo()
+            cv2.waitKey(1)
+            break
+    
+    while True:
+        frame = video.get_video()
+        x,y, frame = detect_ball(frame, "blue")
+        if x != None:
+            print(f"Blue Ball Detected at {x},{y}")
+            cv2.imshow("Ball Detection", frame)
+            api.Plane_fly_take_photo()
+            cv2.waitKey(1)
+            break    
+        
+
+    cv2.destroyAllWindows()
+    video.stoprecording()
+    video.close()
+
+    api.single_fly_touchdown()
+
+

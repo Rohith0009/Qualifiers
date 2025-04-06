@@ -62,6 +62,7 @@ else:
     video = hula_video(hula_api=api,display=False)
     detector = tflite_detector(model="model.tflite",label="label.txt")
     video.video_mode_on()
+    video.startrecording()
 
     api.single_fly_takeoff()
     api.single_fly_forward(10)
@@ -74,6 +75,7 @@ else:
     detect.join()
 
     cv2.destroyALLWindows()
+    video.stoprecording()
     video.close()
 
     api.single_fly_up(20)

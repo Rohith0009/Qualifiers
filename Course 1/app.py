@@ -21,8 +21,10 @@ else:
     video = hula_video(hula_api=api,display=False)
     detector = tflite_detector(model="model.tflite",label="label.txt")
     video.video_mode_on()
+    video.startrecording()
 
     api.single_fly_takeoff()
+    api.Plane_cmd_camera_angle(1,90)
     tof0 = api.get_plane_distance()
     api.single_fly_forward(30)
 
@@ -45,6 +47,7 @@ else:
         time.sleep(0.1)
         break
     cv2.destroyAllWindows()
+    video.stoprecording()
     video.close()
 
     api.single_fly_touchdown()
