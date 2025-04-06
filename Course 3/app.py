@@ -5,6 +5,7 @@ import cv2
 import numpy as np
 import threading
 import math
+from datetime import datetime
 
 api = pyhula.UserApi()
 
@@ -48,10 +49,11 @@ else:
     print("Connection to station by WiFi")
     battery = api.get_battery()
     print("battery level: " + str(api.get_battery()))
+    timestamp = datetime.now().strftime("%d-%b-%Y_%I-%M-%S%p")
 
     video = hula_video(api, display=False)
     video.video_mode_on()
-    video.startrecording()
+    video.startrecording(filename=f"Outputs/OBS-3/Recording-{timestamp}")
 
     api.single_fly_takeoff()
 
@@ -61,7 +63,7 @@ else:
         if x != None:
             print(f"Red Ball Detected at {x},{y}")
             cv2.imshow("Ball Detection", frame)
-            api.Plane_fly_take_photo()
+            cv2.imwrite(f"Outputs/OBS-3/Red-Detection-{timestamp}.png/", frame)
             cv2.waitKey(1)
             break
     
@@ -71,7 +73,7 @@ else:
         if x != None:
             print(f"Blue Ball Detected at {x},{y}")
             cv2.imshow("Ball Detection", frame)
-            api.Plane_fly_take_photo()
+            cv2.imwrite(f"Outputs/OBS-3/Blue-Detection-{timestamp}.png/", frame)
             cv2.waitKey(1)
             break    
         

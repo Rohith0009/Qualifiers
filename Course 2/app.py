@@ -6,6 +6,7 @@ import cv2
 import numpy as np
 import threading
 import math
+from datetime import datetime
 
 api = pyhula.UserApi()
 
@@ -47,7 +48,7 @@ def detection():
         if not object_found is None:
             print(F"Found object: {object_found}")
         cv2.imshow("Detection", frame)
-        api.Plane_fly_take_photo()
+        cv2.imwrite(f"Outputs/OBS-2/Detection-{timestamp}.png/", frame)
         cv2.waitKey(1)
         time.sleep(0.1)
 
@@ -58,11 +59,12 @@ else:
     print("Connection to station by WiFi")
     battery = api.get_battery()
     print("battery level: " + str(api.get_battery()))
+    timestamp = datetime.now().strftime("%d-%b-%Y_%I-%M-%S%p")
 
     video = hula_video(hula_api=api,display=False)
     detector = tflite_detector(model="model.tflite",label="label.txt")
     video.video_mode_on()
-    video.startrecording()
+    video.startrecording(filename=f"Outputs/OBS-2/Recording-{timestamp}")
 
     api.single_fly_takeoff()
     api.single_fly_forward(10)

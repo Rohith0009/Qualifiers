@@ -160,7 +160,6 @@ class hula_video:
                     cv2.imshow('Video', frame_cv2)
                     cv2.waitKey(1)
 
-
         if self.display:
             cv2.destroyWindow('Video')
         self.uapi.Plane_cmd_swith_rtp(1)
