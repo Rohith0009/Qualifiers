@@ -10,10 +10,11 @@ import math
 api = pyhula.UserApi()
 
 move_complete = False
+google_detect = False
 
 
 def circle_up(radius, height_increase, num_steps, loops):
-    while _ < loops:
+    while loop < loops:
         delta_theta = 2 * math.pi / num_steps
         z = height_increase / num_steps
 
@@ -35,7 +36,7 @@ def circle_up(radius, height_increase, num_steps, loops):
             api.single_fly_turnleft(turn)
 
             time.sleep(0.1)
-        _+=1
+        loop+=1
 
     move_complete = True
 
@@ -46,6 +47,7 @@ def detection():
         if not object_found is None:
             print(F"Found object: {object_found}")
         cv2.imshow("Detection", frame)
+        api.Plane_fly_take_photo()
         cv2.waitKey(1)
         time.sleep(0.1)
 
@@ -62,6 +64,7 @@ else:
     video.video_mode_on()
 
     api.single_fly_takeoff()
+    api.single_fly_forward(10)
 
     move = threading.Thread(target=circle_up, args=[50,20,100, 1])
     detect = threading.Thread(target=detection, args=[])
@@ -70,4 +73,9 @@ else:
     move.join()
     detect.join()
 
+    cv2.destroyALLWindows()
+    video.close()
+
+    api.single_fly_up(20)
+    api.single_fly_forward(10)
     api.single_fly_touchdown()
