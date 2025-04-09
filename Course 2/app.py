@@ -76,7 +76,7 @@ else:
     move.join()
     detect.join()
 
-    cv2.destroyALLWindows()
+    cv2.destroyAllWindows()
     video.stoprecording()
     video.close()
 
