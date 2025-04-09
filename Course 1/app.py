@@ -1,7 +1,7 @@
 import pyhula
 import time
 from hula_video import hula_video
-from tflite_detector import tflite_detector
+from tflite_detector import tflite_detector_class as tflite_detector
 import cv2
 import numpy as np
 import threading
@@ -22,7 +22,7 @@ else:
     timestamp = datetime.now().strftime("%d-%b-%Y_%I-%M-%S%p")
 
     video = hula_video(hula_api=api,display=False)
-    detector = tflite_detector(model="model.tflite",label="label.txt")
+    detector = tflite_detector(model="model.tflite", label="label.txt")
     video.video_mode_on()
     video.startrecording(filename=f"Outputs/OBS-1/Recording-{timestamp}")
 
@@ -31,9 +31,13 @@ else:
     tof0 = api.get_plane_distance()
     api.single_fly_forward(30)
 
+    time.sleep(2)
+
     tof1 = api.get_plane_distance()
     print(f"Height of 1'st Step: {tof0-tof1}")
     api.single_fly_forward(30)
+
+    time.sleep(2)
     tof2 = api.get_plane_distance()
     print(f"Height of 2'nd Step: {tof0-tof2}")
 
