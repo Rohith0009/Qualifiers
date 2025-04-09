@@ -19,8 +19,10 @@ class tflite_detector:
         self.model_loaded = False
         self.vid_width = vid_width
         self.vid_height = vid_height
+        print("1111111")
 
         if os.path.isfile(self.tf_model) and os.path.isfile(self.tf_label):
+            print("22222")
             with open(self.tf_label, "r") as f:
                 self.labels = [line.strip() for line in f.readlines()]
                 f.close()
@@ -34,6 +36,8 @@ class tflite_detector:
             self.tf_input_height = self.input_details[0]['shape'][1]
             self.floating_model = self.input_details[0]['dtype'] == np.float32
             self.model_loaded = True
+
+            print("33333")
         else:
             print("Loading model failed: model file or label file not found")
     
