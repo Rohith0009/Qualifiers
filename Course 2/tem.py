@@ -10,47 +10,32 @@ from datetime import datetime
 
 api = pyhula.UserApi()
 
+global loop, move_complete
+
+
 move_complete = False
 google_detect = False
-global loop
 
 
 def circle_up(radius, height_increase, num_steps, loops):
-    loop=0
-    while loop < loops:
-        delta_theta = 2 * math.pi / num_steps
-        z = height_increase / num_steps
-
-        for i in range(num_steps):
-            theta_i = i * delta_theta
-            theta_next = (i + 1) * delta_theta
-
-            x_i = radius * math.cos(theta_i)
-            y_i = radius * math.sin(theta_i)
-            x_next = radius * math.cos(theta_next)
-            y_next = radius * math.sin(theta_next)
-
-            dx = x_next - x_i
-            dy = y_next - y_i
-
-            turn = 360/num_steps
-
-            api.single_fly_straight_flight(dx, dy, z)
-            api.single_fly_turnleft(turn)
-
-            time.sleep(0.1)
-        loop+=1
-
-    move_complete = True
+    global move_complete
+    api.single_fly_radius_around(100)
+    api.single_fly_up(30)
+    api.single_fly_radius_around(100)
+    move_complete=True
 
 def detection():
+    print("gergre")
     while not move_complete:
         frame = video.get_video()
         object_found, frame = detector.detect(frame)
         if not object_found is None:
             print(F"Found object: {object_found}")
-        cv2.imshow("Detection", frame)
-        cv2.imwrite(f"Outputs/OBS-2/Detection-{timestamp}.png/", frame)
+            if object_found['label']=="Google":
+                print("DETECTED!!!")
+                cv2.imshow("Detection", frame)
+                timestamp = datetime.now().strftime("%d-%b-%Y_%I-%M-%S%p")
+                cv2.imwrite(f"photo{timestamp}.jpeg", frame)
         cv2.waitKey(1)
         time.sleep(0.1)
 
@@ -63,10 +48,10 @@ else:
     print("battery level: " + str(api.get_battery()))
     timestamp = datetime.now().strftime("%d-%b-%Y_%I-%M-%S%p")
 
-    video = hula_video(hula_api=api,display=False)
-    detector = tflite_detector(model="model.tflite",label="label.txt")
+    video = hula_video(hula_api=api,display=True)
+    detector = tflite_detector(model="model.tflite", label="label.txt")
     video.video_mode_on()
-    video.startrecording(filename=f"/Outputs/OBS-2/Recording-{timestamp}.jpeg")
+    video.startrecording(filename=f"2/Recording-{timestamp}.jpeg")
 
     api.single_fly_takeoff()
     api.single_fly_forward(10)
@@ -77,10 +62,6 @@ else:
     detect.start()
     move.join()
     detect.join()
-
-    cv2.destroyAllWindows()
-    video.stoprecording()
-    video.close()
 
     api.single_fly_up(20)
     api.single_fly_forward(10)
