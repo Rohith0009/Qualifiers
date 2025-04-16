@@ -7,7 +7,8 @@ from datetime import datetime
 
 api = pyhula.UserApi()  
 
-req_area = 5000
+min_area = 100
+max_area = 8000
 
 alligned = False
 x_complete = False
@@ -22,11 +23,11 @@ def detect_ball(frame, color):
         mask = cv2.inRange(hsv, lower, Upper)
 
     if color == "red":
-        lower1 = np.array([0, 120, 70])
+        lower1 = np.array([0, 150, 150])
         Upper1 = np.array([10, 255, 255])
         mask1 = cv2.inRange(hsv, lower1, Upper1)
 
-        lower2 = np.array([170, 120, 70])
+        lower2 = np.array([170, 150, 150])
         Upper2 = np.array([180, 255, 255])
         mask2 = cv2.inRange(hsv, lower2, Upper2)
 
@@ -52,10 +53,10 @@ def detect_ball(frame, color):
         return None, None, frame, None
 
 def move():
-    api.single_fly_down(40)
-    api.single_fly_forward(120)
+    api.single_fly_forward(70)
     time.sleep(1)
-    api.single_fly_back(120)
+    api.single_fly_back(70)
+    api.single_fly_left(40)
 
 def detect_allign(color):
     global x_complete, y_complete
@@ -63,29 +64,29 @@ def detect_allign(color):
     while not alligned:
         frame = video.get_video()
         x,y, frame, area = detect_ball(frame, color)
-        if x != None  and area>=req_area :
+        if x != None  and area>=min_area and area<=max_area :
             print(f"{color} Ball Detected at {x},{y}")
             cv2.imshow(f"{color} Detection", frame)
             cv2.waitKey(1)
             if x < 610:
                 print("Moving Left")
-                api.single_fly_left(20)
+                api.single_fly_left(10)
             elif x > 670:
                 print("Moving Right")
-                api.single_fly_right(20)
+                api.single_fly_right(10)
 
             else:
                 x_complete = True
-            if y > 390:
-                print("Moving Forward")
-                api.single_fly_back(20)        
-            elif y < 320:
-                print("moving Back")
-                api.single_fly_forward(20)
-            else:
-                y_complete = True
+#            if y > 390:
+ #               print("Moving Forward")
+  #              api.single_fly_back(20)        
+   #         elif y < 320:
+    #            print("moving Back")
+     #           api.single_fly_forward(20)
+      #      else:
+       #         y_complete = True
 
-            if x_complete and y_complete:
+            if x_complete:
                 print("Successfully alligned")
                 alligned = True
                 move()
@@ -103,13 +104,12 @@ else:
     video.video_mode_on()
 
     api.single_fly_takeoff()
-    api.single_fly_forward(70)
-    api.Plane_cmd_camera_angle(1, 0)
+    api.Plane_cmd_camera_angle(1, 30)
 
     while True:
         frame = video.get_video()
         x,y, frame, area = detect_ball(frame, "blue")
-        if x != None  and area>=req_area :
+        if x != None  and area>=min_area and area <=max_area :
             print(f"Blue Ball Detected at {x},{y}")
             cv2.imshow(f"Blue Detection", frame)
             cv2.imwrite(f"Blue-Detection-{timestamp}.jpeg", frame)
@@ -119,12 +119,13 @@ else:
     while True:
         frame = video.get_video()
         x,y, frame, area = detect_ball(frame, "red")
-        if x != None  and area>=req_area :
+        if x != None  and area>=min_area and area <=max_area :
             print(f"Blue Red Detected at {x},{y}")
             cv2.imshow(f"Red Detection", frame)
             cv2.imwrite(f"Red-Detection-{timestamp}.jpeg", frame)
             cv2.waitKey(1)
             break    
+
 
     detect_allign("red")
 
