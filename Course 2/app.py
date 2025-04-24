@@ -11,11 +11,11 @@ api = pyhula.UserApi()
 move_complete = False
 
 
-def circle_up():
+def circle_up(radius):
     global move_complete
-    api.single_fly_radius_around(100)
+    api.single_fly_radius_around(radius)
     api.single_fly_up(30)
-    api.single_fly_radius_around(100)
+    api.single_fly_radius_around(radius)
     move_complete=True
 
 def detection():
@@ -51,7 +51,7 @@ else:
     api.single_fly_down(30)
     api.single_fly_forward(10)
 
-    move = threading.Thread(target=circle_up, args=[])
+    move = threading.Thread(target=circle_up, args=[100])
     detect = threading.Thread(target=detection, args=[])
     move.start()
     detect.start()
