@@ -23,6 +23,7 @@ def detection():
     while not move_complete:
         frame = video.get_video()
         object_found, frame = detector.detect(frame)
+        print("attempting")
         if not object_found is None:
             print(F"Found object: {object_found}")
             if object_found['label']=="Google":
@@ -48,10 +49,10 @@ else:
     video.video_mode_on()
 
     api.single_fly_takeoff()
-    api.single_fly_down(30)
+    api.single_fly_down(40)
     api.single_fly_forward(10)
 
-    move = threading.Thread(target=circle_up, args=[100])
+    move = threading.Thread(target=circle_up, args=[95])
     detect = threading.Thread(target=detection, args=[])
     move.start()
     detect.start()
@@ -59,9 +60,7 @@ else:
     detect.join()
 
     api.single_fly_up(50)
-    api.single_fly_forward(10)
-    if not api.single_fly_Qrcode_align(0,0)['result']:
-        api.single_fly_Qrcode_align(0,0)
+    api.single_fly_forward(50)
     api.single_fly_touchdown()
 
     cv2.imshow("Detection", final_detected)

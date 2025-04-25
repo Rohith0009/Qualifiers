@@ -29,21 +29,25 @@ else:
     time.sleep(1)
     tof0 = api.get_plane_distance()
 
-    api.single_fly_forward(90)
+    api.single_fly_forward(100)
 
-    time.sleep(1)
 
     tof1 = api.get_plane_distance()
     print(f"Height of 1'st Step: {tof0-tof1}")
-    api.single_fly_forward(60)
 
     time.sleep(1)
-    tof2 = api.get_plane_distance()
-    print(f"Height of 2'nd Step: {tof0-tof2}")
+
     api.single_fly_forward(60)
 
-    while not imda_detect:    
-        print("attempting")
+    tof2 = api.get_plane_distance()
+    print(f"Height of 2'nd Step: {tof0-tof2}")
+
+    time.sleep(1)
+
+    api.single_fly_forward(70)
+
+    while not imda_detect:
+        print("attempting") 
         frame = video.get_video()
         object_found, frame = detector.detect(frame)
         if not object_found is None:

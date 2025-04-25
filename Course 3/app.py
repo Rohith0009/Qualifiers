@@ -53,9 +53,10 @@ def detect_ball(frame, color):
         return None, None, frame, None
 
 def move():
-    api.single_fly_forward(70)
+    api.single_fly_right(10)
+    api.single_fly_forward(110)
     time.sleep(1)
-    api.single_fly_back(70)
+    api.single_fly_back(100)
     api.single_fly_left(40)
 
 def detect_allign(color):
