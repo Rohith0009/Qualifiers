@@ -5,11 +5,7 @@ from tflite_detector import tflite_detector
 import cv2
 from datetime import datetime
 
-
-
 api = pyhula.UserApi()
-
-imda_detect = False
 
 if not api.connect():
     print("Connection error")
@@ -31,35 +27,25 @@ else:
 
     api.single_fly_forward(100)
 
-
     tof1 = api.get_plane_distance()
     print(f"Height of 1'st Step: {tof0-tof1}")
 
     time.sleep(1)
 
-    api.single_fly_forward(60)
+    api.single_fly_forward(130)
 
-    tof2 = api.get_plane_distance()
-    print(f"Height of 2'nd Step: {tof0-tof2}")
-
-    time.sleep(1)
-
-    api.single_fly_forward(70)
-
-    while not imda_detect:
+    while True:
+        print("detecting")
         frame = video.get_video()
         object_found, frame = detector.detect(frame)
         if not object_found is None:
             print(F"Found object: {object_found}")
             if object_found['label']=="IMDA":
-                print("DETECTED!!!")
+                print("DETECTED IMDA!!!")
                 final_frame = frame
                 cv2.imshow("Detection", frame)
                 cv2.imwrite(f"IMDA-detection-{timestamp}.jpeg", frame)
-                imda_detect = True
                 break
-        cv2.waitKey(1)
-        time.sleep(0.1)
 
     api.single_fly_touchdown()
 
@@ -67,7 +53,6 @@ else:
     cv2.waitKey(100)
 
     print(f"Height of 1'st Step: {tof0-tof1}")
-    print(f"Height of 2'nd Step: {tof0-tof2}")
 
 
     
