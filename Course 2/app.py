@@ -23,7 +23,6 @@ def detection():
     while not move_complete:
         frame = video.get_video()
         object_found, frame = detector.detect(frame)
-        print("attempting")
         if not object_found is None:
             print(F"Found object: {object_found}")
             if object_found['label']=="Google":

@@ -47,7 +47,6 @@ else:
     api.single_fly_forward(70)
 
     while not imda_detect:
-        print("attempting") 
         frame = video.get_video()
         object_found, frame = detector.detect(frame)
         if not object_found is None:
