@@ -28,7 +28,7 @@ else:
     api.single_fly_forward(100)
 
     tof1 = api.get_plane_distance()
-    print(f"Height of 1'st Step: {tof0-tof1}")
+    print(f"Height of 1'st Step: {tof0}-{tof1} = {tof0-tof1}")
 
     time.sleep(1)
 
@@ -51,8 +51,8 @@ else:
 
     cv2.imshow("Detection", final_frame)
     cv2.waitKey(100)
-
-    print(f"Height of 1'st Step: {tof0-tof1}")
+    
+    print(f"Height of 1'st Step: {tof0}-{tof1} = {tof0-tof1}")
 
 
     
