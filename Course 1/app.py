@@ -7,6 +7,7 @@ from datetime import datetime
 
 api = pyhula.UserApi()
 
+
 if not api.connect():
     print("Connection error")
 else:
@@ -32,7 +33,7 @@ else:
 
     time.sleep(1)
 
-    api.single_fly_forward(130)
+    api.single_fly_forward(40)
 
     while True:
         print("detecting")

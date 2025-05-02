@@ -59,7 +59,7 @@ else:
     detect.join()
 
     api.single_fly_up(50)
-    api.single_fly_forward(50)
+    api.single_fly_forward(30)
     api.single_fly_touchdown()
 
     cv2.imshow("Detection", final_detected)
